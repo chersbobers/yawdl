@@ -1,0 +1,29 @@
+YAWDL {
+  Program = Block*
+  Block   = Style | Script | UI | TT | Image | Paget | Import
+  
+  Style   = style_kw "{" Content_Brace "}"
+  Script  = script_kw "{" Content_Brace "}"
+  UI      = ui_kw "{" Content_Brace "}"
+  TT      = title_kw "{" Content_Brace "}"
+  Paget   = paget_kw "{" Content_Brace "}"
+
+  Import  = import_kw "(" quote Content_Paren quote ")"
+  
+  Image   = image_kw "(" quote Content_Paren quote "," quote Content_Paren quote "," number "," number ")"
+  
+  Content_Brace = (~("}" Lookahead) any)*
+  Content_Paren = (~(quote | ")") any)*
+  
+  style_kw  = caseInsensitive<"style">
+  script_kw = caseInsensitive<"script">
+  ui_kw     = caseInsensitive<"ui">
+  title_kw  = caseInsensitive<"title">
+  image_kw  = caseInsensitive<"image">
+  paget_kw  = caseInsensitive<"paget">
+  import_kw = caseInsensitive<"import">
+  
+  number    = digit+
+  quote     = "\""
+  Lookahead = style_kw | script_kw | ui_kw | title_kw | image_kw | paget_kw | import_kw | end
+}
