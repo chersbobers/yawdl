@@ -14,7 +14,7 @@ const yawdlGrammar = ohm.grammar(grammarSource);
             Program(blocks) { blocks.children.forEach(c => c.process()); },
             Block(e) { e.process(); },
             
-            // Re-adding the missing actions
+            
             Paget(_t, _o, content, _c) { head += `<title>${content.sourceString}</title>\n`; },
             TT(_t, _o, content, _c) { ui = `<h1>${content.sourceString}</h1>\n` + ui; },
             Style(_t, _o, content, _c) { styles += content.sourceString + "\n"; },

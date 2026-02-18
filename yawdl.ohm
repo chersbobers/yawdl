@@ -1,7 +1,7 @@
 YAWDL {
   Program = Block*
   Block   = Style | Script | UI | TT | Image | Paget | Import
-  
+
   Style   = style_kw "{" Content_Brace "}"
   Script  = script_kw "{" Content_Brace "}"
   UI      = ui_kw "{" Content_Brace "}"
@@ -12,13 +12,14 @@ YAWDL {
   
   Image   = image_kw "(" quote Content_Paren quote "," quote Content_Paren quote "," number "," number ")"
   
-  Content_Brace = (~("}" Lookahead) any)*
+  Content_Brace = (~("}" Lookahead) (BraceGroup | any))*
+  BraceGroup    = "{" (~"}" any)* "}"
   Content_Paren = (~(quote | ")") any)*
   
   style_kw  = caseInsensitive<"style">
   script_kw = caseInsensitive<"script">
   ui_kw     = caseInsensitive<"ui">
-  title_kw  = caseInsensitive<"title">
+  title_kw  = caseInsensitive<"tt">
   image_kw  = caseInsensitive<"image">
   paget_kw  = caseInsensitive<"paget">
   import_kw = caseInsensitive<"import">
