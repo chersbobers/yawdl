@@ -8,6 +8,7 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "ohm-js": "^17.5.0"
+    "ohm-js": "^17.5.0",
+    "resedit": "^3.0.2"
   }
 }

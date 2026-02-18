@@ -1,18 +1,69 @@
 import { writeFileSync, existsSync, mkdirSync } from "fs";
 import engineCode from "./yawdl-engine.js" with { type: "text" };
 
-const bootloader = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Yawdl Project</title><style id="yawdl-init-style">body{background:#191724;color:#e0def4;font-family:monospace;display:flex;justify-content:center;align-items:center;height:100vh;margin:0}.loading-text{animation:blink .8s infinite}@keyframes blink{50%{border-color:transparent}}</style></head><body><div id="loader" class="loading-text">LOADING...</div><script type="module">import "./yawdl-engine.js";async function init(){try{const e=await fetch("app.yawdl"),t=await e.text(),n=window.Yawdl.compile(t);document.head.insertAdjacentHTML("beforeend",n.head),document.head.insertAdjacentHTML("beforeend",\`<style>\${n.styles}</style>\`),document.getElementById("yawdl-init-style").remove(),document.body.style.display="block",document.body.style.height="auto",document.body.innerHTML=\`<div id="root">\${n.ui}</div>\`;const d=document.createElement("script");d.textContent=n.scripts,document.body.appendChild(d)}catch(e){document.body.innerHTML=\`<pre>System Error: \${e.message}</pre>\`}}${`init();`}</script></body></html>`;
+const bootloader = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAWDL</title>
+    <style id="yawdl-init-style">
+        body { background: #191724; color: #e0def4; font-family: monospace; 
+               display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .loading-text { letter-spacing: 2px; border-right: 2px solid #ebbcba; padding-right: 8px; animation: blink 0.8s infinite; }
+        @keyframes blink { 50% { border-color: transparent; } }
+    </style>
+</head>
+<body>
+    <div id="loader" class="loading-text">LOADING...</div>
 
-const starterYawdl = `Paget { New Project }\n\nTT { Welcome to YAWDL }\n\nUI { <p>Start editing app.yawdl to see changes.</p> }\n\nStyle { body { font-family: sans-serif; text-align: center; } }`;
+    <script type="module">
+        import "./yawdl-engine.js";
+
+        async function init() {
+            try {
+                // Smart Routing: /hi looks for hi.yawdl, / looks for app.yawdl
+                const path = window.location.pathname.split("/").pop();
+                const targetFile = (path && path.includes('.')) ? path : 
+                                   (path && path !== "") ? \`\${path}.yawdl\` : "app.yawdl";
+
+                const response = await fetch(targetFile);
+                if (!response.ok) throw new Error(\`File not found: \${targetFile}\`);
+                
+                const code = await response.text();
+                const result = window.Yawdl.compile(code);
+
+                document.head.insertAdjacentHTML('beforeend', result.head);
+                document.head.insertAdjacentHTML('beforeend', \`<style>\${result.styles}</style>\`);
+                
+                const initStyle = document.getElementById('yawdl-init-style');
+                if (initStyle) initStyle.remove();
+
+                document.body.style.display = "block";
+                document.body.style.height = "auto";
+                document.body.innerHTML = \`<div id="root">\${result.ui}</div>\`;
+                
+                const scriptEl = document.createElement("script");
+                scriptEl.textContent = result.scripts;
+                document.body.appendChild(scriptEl);
+
+            } catch (err) {
+                document.body.innerHTML = \`<pre style="color: #eb6f92">YAWDL Error: \${err.message}</pre>\`;
+            }
+        }
+        init();
+    </script>
+</body>
+</html>`;
 
 const targetDir = process.argv[2] || ".";
 if (targetDir !== "." && !existsSync(targetDir)) mkdirSync(targetDir);
 
 writeFileSync(`${targetDir}/index.html`, bootloader);
 writeFileSync(`${targetDir}/yawdl-engine.js`, engineCode);
+
 if (!existsSync(`${targetDir}/app.yawdl`)) {
-    writeFileSync(`${targetDir}/app.yawdl`, starterYawdl);
+    writeFileSync(`${targetDir}/app.yawdl`, `TT { Welcome to YAWDL }\nUI { <p>Edit app.yawdl or create hi.yawdl to see routing in action.</p> }`);
 }
 
-console.log(`\project ready in ${targetDir}!`);
-console.log(`run a local server and start coding.`);
+console.log("done");
