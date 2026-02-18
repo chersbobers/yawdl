@@ -11,7 +11,7 @@ if (!(Test-Path $binDir)) { New-Item -ItemType Directory -Path $binDir -Force | 
 Write-Host "--- YAWDL Installer ---" -ForegroundColor Cyan
 
 
-Write-Host "Downloading 100MB... (This will be quick now)" -ForegroundColor Yellow
+Write-Host "Downloading 100MB" -ForegroundColor Yellow
 $client = New-Object System.Net.WebClient
 try {
     $client.DownloadFile($repoUrl, $exePath)
@@ -26,4 +26,4 @@ if ($currentPath -notlike "*$binDir*") {
     [Environment]::SetEnvironmentVariable("Path", "$currentPath;$binDir", "User")
 }
 
-Write-Host "✅ Done! Close and restart your terminal." -ForegroundColor Green
+Write-Host "finished restart terminal to use" -ForegroundColor Green
