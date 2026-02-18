@@ -57,13 +57,3 @@ To publish your site, simply upload the following files to any static web host:
 * `app.yawdl`
 
 ---
-
-## Maintenance
-
-To keep the repository clean of build artifacts, ensure your `.gitignore` includes:
-
-```text
-node_modules/
-*.exe
-yawdl-engine.js
-.DS_Store
