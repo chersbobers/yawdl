@@ -1,3 +1,4 @@
+# Main repo: [Codeberg](https://codeberg.org/chersbobers/yawdl) Pushing too [Github](https://github.com/chersbobers/yawdl)
 # YAWDL: Yet Another Web Development Language
 
 YAWDL is a super small and simple language for making websites. It has a client-side engine that turns .yawdl files into a real website right in your browser.
