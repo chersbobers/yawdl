@@ -1,0 +1,10 @@
+(pkg
+  (name "yawdl")
+  (version "1.0")
+  (deps ["bun"])
+  (build
+    (windows (run "pwsh" "install.ps1"))
+    (linux   (run "bun" "build" "--compile" "--target=bun-linux-x64" "./yawdl-cli.ts" "--outfile" "yawdl"))
+    (macos   (run "bun" "build" "--compile" "--target=bun-darwin-arm64" "./yawdl-cli.ts" "--outfile" "yawdl")))
+  (install
+    (bin "yawdl")))
